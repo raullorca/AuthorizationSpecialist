@@ -47,6 +47,9 @@ namespace MvcClient
                             options.ResponseType = "code"; // Usamos el flujo de protocolo (code) con PKCE para conectarse al proveedor OpenID Connect
 
                             options.SaveTokens = true; // Se utiliza para conserver los tokens de IS en la cookie
+
+                            options.Scope.Add("api1");
+                            options.Scope.Add("offline_access");
                         });
         }
 

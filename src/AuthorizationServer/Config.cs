@@ -45,26 +45,30 @@ namespace AuthorizationServer
                 },
                 // interactive ASP.NET Core MVC client
                 new Client
-                {
-                    ClientId = "mvc",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequireConsent = false,
-                    RequirePkce = true,
-
-                    // where to redirect to after login
-                    RedirectUris = { "http://localhost:5002/signin-oidc" },
-
-                    // where to redirect to after logout
-                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
-
-                    AllowedScopes = new List<string>
                     {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        ClientId = "mvc",
+                        ClientSecrets = { new Secret("secret".Sha256()) },
+
+                        AllowedGrantTypes = GrantTypes.Code,
+                        RequireConsent = false,
+                        RequirePkce = true,
+
+                        // where to redirect to after login
+                        RedirectUris = { "http://localhost:5002/signin-oidc" },
+
+                        // where to redirect to after logout
+                        PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
+
+                        AllowedScopes = new List<string>
+                        {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+                            "api1"
+                        },
+
+                        // Se habilita la compatibilidad con tokens de actualización.
+                        AllowOfflineAccess = true
                     }
-                }
             };
 
     }
