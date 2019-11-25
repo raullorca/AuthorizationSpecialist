@@ -7,6 +7,7 @@ using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
@@ -17,11 +18,27 @@ namespace AuthorizationServer
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public IWebHostEnvironment Environment { get; }
 
         public Startup(IWebHostEnvironment environment)
         {
             Environment = environment;
+
+            var builder = new ConfigurationBuilder()
+                            .SetBasePath(environment.ContentRootPath)
+                            //.AddJsonFile("appsettings.json",
+                            //             optional: false,
+                            //             reloadOnChange: true)
+                            .AddEnvironmentVariables();
+
+            if (environment.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -55,8 +72,8 @@ namespace AuthorizationServer
                 {
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                    options.ClientId = "1069605649624-bjub4l55vmbk17ia1rrui79m4pd3eeai.apps.googleusercontent.com";
-                    options.ClientSecret = "JhxeetQqpik6sk-O-9f4I9_v";
+                    options.ClientId = Configuration["Google:ClientId"];
+                    options.ClientSecret = Configuration["Google:Secret"];
                 })
                 .AddOpenIdConnect("oidc", "Demo IdentityServer", options =>
                 {
